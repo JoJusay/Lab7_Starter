@@ -54,12 +54,14 @@ describe('Basic user flow for Website', () => {
       it checks every <product-item> it found
     * Remove the .skip from this it once you are finished writing this test.
     */
+  
+    //I wrote a for-loop around 'firstValue' and changed prodItemsData[0] to increment through the map
 
   }, 10000);
 
   // Check to make sure that when you click "Add to Cart" on the first <product-item> that
   // the button swaps to "Remove from Cart"
-  it.skip('Clicking the "Add to Cart" button should change button text', async () => {
+  it('Clicking the "Add to Cart" button should change button text', async () => {
     console.log('Checking the "Add to Cart" button...');
 
     /**
@@ -70,6 +72,23 @@ describe('Basic user flow for Website', () => {
      * Once you have the innerText property, use innerText.jsonValue() to get the text value of it
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
+
+    //Query a <product-item> element using puppeteer ( checkout page.$() and page.$$() in the docs )
+    const prodItem = await page.$('product-item');
+
+    //Grab the shadowRoot of that element (it's a property)
+    const prodItemShadowRoot = await prodItem.evaluateHandle(prodItem => prodItem.shadowRoot);
+     
+    //Then query a button from that shadowRoot.
+    const prodShadowButton = await prodItemShadowRoot.$('button');
+
+    //Once you have the button, you can click it and check the innerText property of the button.
+    await prodShadowButton.click();
+
+    //Once you have the innerText property, use innerText.jsonValue() to get the text value of it
+    const innerTextProp = await prodShadowButton.getProperty('innerText');
+    expect(await innerTextProp.jsonValue()).toBe('Remove from Cart');
+
 
   }, 2500);
 
@@ -86,6 +105,19 @@ describe('Basic user flow for Website', () => {
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
 
+    //Query select all of the <product-item> elements
+
+
+    //For every single product element get the shadowRoot
+
+
+    //Query select the button inside, and click on it.
+
+
+    //Check to see if the innerText of #cart-count is 20
+
+
+
   }, 10000);
 
   // Check to make sure that after you reload the page it remembers all of the items in your cart
@@ -100,6 +132,17 @@ describe('Basic user flow for Website', () => {
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
 
+    //Reload the page
+
+
+    //Select all of the <product-item> elements
+
+
+    //Check every element to make sure that all of their buttons say "Remove from Cart".
+
+
+    //Check to make sure that #cart-count is still 20
+
   }, 10000);
 
   // Check to make sure that the cart in localStorage is what you expect
@@ -111,6 +154,9 @@ describe('Basic user flow for Website', () => {
        '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]', check to make sure it is
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
+
+    //Check to make sure the item 'cart' in localStorage is '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]'
+
 
   });
 
@@ -125,6 +171,13 @@ describe('Basic user flow for Website', () => {
      * Once you have, check to make sure that #cart-count is now 0
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
+
+    //Go through and click "Remove from Cart" on every single <product-item>
+
+
+    //Check to make sure that #cart-count is now 0
+
+
 
   }, 10000);
 
@@ -141,6 +194,14 @@ describe('Basic user flow for Website', () => {
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
 
+    //Reload the page once more
+    
+    
+    //Go through each <product-item> to make sure that it has remembered nothing
+    //is in the cart - do this by checking the text on the buttons so that they should say "Add to Cart".
+
+
+    //Check to make sure that #cart-count is still 0
   }, 10000);
 
   // Checking to make sure that localStorage for the cart is as we'd expect for the
@@ -153,6 +214,8 @@ describe('Basic user flow for Website', () => {
      * At this point he item 'cart' in localStorage should be '[]', check to make sure it is
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
+
+     //Check to make sure the item 'cart' in localStorage is '[]'
 
   });
 });
