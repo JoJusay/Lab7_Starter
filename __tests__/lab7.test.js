@@ -38,7 +38,7 @@ describe('Basic user flow for Website', () => {
     console.log(`Checking product item 1/${prodItemsData.length}`);
 
     // Make sure the title, price, and image are populated in the JSON
-    for (let i = 0; i < prodItemsData.size(); i++) {
+    for (let i = 0; i < prodItemsData.size; i++) {
       firstValue = prodItemsData[i];
       if (firstValue.title.length == 0) { allArePopulated = false; }
       if (firstValue.price.length == 0) { allArePopulated = false; }
