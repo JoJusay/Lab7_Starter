@@ -89,7 +89,8 @@ describe('Basic user flow for Website', () => {
     const innerTextProp = await prodShadowButton.getProperty('innerText');
     expect(await innerTextProp.jsonValue()).toBe('Remove from Cart');
 
-
+    //Click again to reset for next test
+    await prodShadowButton.click();
   }, 2500);
 
   // Check to make sure that after clicking "Add to Cart" on every <product-item> that the Cart
@@ -106,16 +107,23 @@ describe('Basic user flow for Website', () => {
      */
 
     //Query select all of the <product-item> elements
-
+    const products = await page.$$('product-item');
 
     //For every single product element get the shadowRoot
+    for (let i = 0; i < products.length; i++) {
+      let prodShadRoot = await products[i].evaluateHandle(prodItem => prodItem.shadowRoot);
 
+      //Query select the button inside, and click on it.
+      const prodShadButton = await prodShadRoot.$('button');
 
-    //Query select the button inside, and click on it.
+      await prodShadButton.click();
 
+    }
 
     //Check to see if the innerText of #cart-count is 20
-
+    let cart = await page.$("#cart-count");
+    let cart_count = await cart.getProperty('innerText');
+    expect(await cart_count.jsonValue()).toBe('20');
 
 
   }, 10000);
@@ -133,15 +141,23 @@ describe('Basic user flow for Website', () => {
      */
 
     //Reload the page
-
+    await page.reload();
 
     //Select all of the <product-item> elements
-
+    const products = await page.$$eval('product-item')
 
     //Check every element to make sure that all of their buttons say "Remove from Cart".
+    for (let i = 0; i < products.length; i++) {
+      const prodShadButton = await prodShadRoot.$('button');
+      const prodShadButtonText = await prodShadButton.getProperty('innerText');
 
+      expect(await prodShadButtonText.jsonValue()).toBe('Remove from Cart');
+    }
 
     //Check to make sure that #cart-count is still 20
+    let cart = await page$("cart-count");
+    let cart_count = await cart.getProperty('innerText');
+    expect(await cart_count.jsonValue()).toBe('20');
 
   }, 10000);
 
@@ -156,7 +172,10 @@ describe('Basic user flow for Website', () => {
      */
 
     //Check to make sure the item 'cart' in localStorage is '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]'
-
+    const cartItem = await page.evaluate(() => {
+      return localStorage.getItem('cart');
+    });
+    expect(cartItem).toBe('[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]');
 
   });
 
