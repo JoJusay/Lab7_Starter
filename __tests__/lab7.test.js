@@ -166,7 +166,7 @@ describe('Basic user flow for Website', () => {
   }, 10000);
 
   // Check to make sure that the cart in localStorage is what you expect
-  it.skip('Checking the localStorage to make sure cart is correct', async () => {
+  it('Checking the localStorage to make sure cart is correct', async () => {
 
     /**
      **** TODO - STEP 5 **** 
@@ -219,7 +219,7 @@ describe('Basic user flow for Website', () => {
 
   // Checking to make sure that it remembers us removing everything from the cart
   // after we refresh the page
-  it.skip('Checking number of items in cart on screen after reload', async () => {
+  it('Checking number of items in cart on screen after reload', async () => {
     console.log('Checking number of items in cart on screen after reload...');
 
     /**
@@ -235,10 +235,20 @@ describe('Basic user flow for Website', () => {
     
     //Go through each <product-item> to make sure that it has remembered nothing
     //is in the cart - do this by checking the text on the buttons so that they should say "Add to Cart".
-
+    //Check every element to make sure that all of their buttons say "Remove from Cart".
+    let addToCartFlag = await page.$$eval('product-item', (prodItems) => {
+      //Check every element to make sure that all of their buttons say "Remove from Cart".
+      for (let i = 0; i < prodItems.length; i++) {
+        if (prodItems[i].shadowRoot.querySelector('button').innerText == 'Remove from Cart') {
+          return false;
+        }
+      }
+      return true;
+    });
+    expect(addToCartFlag).toBe(true);
 
     //Check to make sure that #cart-count is still 0
-    let cart = await page.$("cart-count");
+    let cart = await page.$("#cart-count");
     let cart_count = await cart.getProperty('innerText');
     expect(await cart_count.jsonValue()).toBe('0');
   }, 10000);
