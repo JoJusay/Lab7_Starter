@@ -8,6 +8,8 @@ Github actions is the only one of the three options that is automated. By having
 
 2) Would you use an end to end test to check if a function is returning the correct output? (yes/__no__)
 
+   Yes
+
 3) What is the difference between navigation and snapshot mode? 
    
 Navigation mode analyzes a page right after it loads, whereas snapshot mode analyzes a page based on a snapshot of its current state. 
