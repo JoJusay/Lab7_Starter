@@ -185,7 +185,7 @@ describe('Basic user flow for Website', () => {
 
   // Checking to make sure that if you remove all of the items from the cart that the cart
   // number in the top right of the screen is 0
-  it.skip('Checking number of items in cart on screen after removing from cart', async () => {
+  it('Checking number of items in cart on screen after removing from cart', async () => {
     console.log('Checking number of items in cart on screen...');
 
     /**
@@ -196,10 +196,23 @@ describe('Basic user flow for Website', () => {
      */
 
     //Go through and click "Remove from Cart" on every single <product-item>
-    
+    await page.evaluate(() => {
+      //Query select all of the <product-item> elements
+      const products = document.querySelectorAll('product-item');
+
+      //For every single product element get the shadowRoot
+      for (let i = 0; i < products.length; i++) {
+        
+        //Query select the button inside, and click on it.
+        products[i].shadowRoot.querySelector('button').click();
+      }
+
+    });
 
     //Check to make sure that #cart-count is now 0
-
+    let cart = await page.$("#cart-count");
+    let cart_count = await cart.getProperty('innerText');
+    expect(await cart_count.jsonValue()).toBe('0');
 
 
   }, 10000);
